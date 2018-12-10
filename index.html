@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charSet="utf-8" />
+        <title>L'Traductó</title>
+    </head>
+    <body>
+        <div id="MainContainer">
+            <textarea rows="4" cols="50">
+            </textarea>
+        </div>
+    </body>
+<script>
+    function isS(char) {
+        return char.toLowerCase() === 's';
+    }
+
+    function finishInS(word) {
+        return isS(word[word.length-1]);
+    }
+
+    function removeLastChar(word) {
+        return word.substring(0, word.length-1);
+    }
+
+    function isVowel(char)
+    {
+        return 'aeiou'.includes(char.toLowerCase())
+    }
+
+    function removeLastVowel(word)
+    {
+        if (word.length < 3)
+            return word;
+        if (isVowel(word[word.length - 2])) {
+            word = word.slice(0, -2) + word[word.length-1];
+        }
+        return word;
+    }
+
+    function isD(char)
+    {
+        return char.toLowerCase() === 'd';
+    }
+
+    function lastDtoT(word) {
+        if (word.length == 1) {
+            return word;
+        }
+
+        if (isD(word[word.length - 1])) {
+            word = word.slice(0, -1) + 't';
+        }
+        return word;
+    }
+
+    function apostrophyze(word)
+    {
+        return word + "'";
+    }
+
+    function tildyze(word)
+    {
+        if (word.length < 3) {
+            return word;
+        }
+
+        if ('rnzl'.includes(word[word.length - 1]))
+        {
+            switch (word[word.length - 2]) {
+                case 'a':
+                    word = word.slice(0, -2) + 'à' + word[word.length - 1];
+                    break;
+                case 'e':
+                    word = word.slice(0, -2) + 'è' + word[word.length - 1];
+                    break;
+                case 'i':
+                    word = word.slice(0, -2) + 'ì' + word[word.length - 1];
+                    break;
+                case 'o':
+                    word = word.slice(0, -2) + 'ò' + word[word.length - 1];
+                    break;
+                case 'u':
+                    word = word.slice(0, -2) + 'ù' + word[word.length - 1];
+                    break;
+            }
+        }
+        return word;
+    }
+
+    function queToQ(word)
+    {
+        if (word.toLowerCase() == 'que') {
+            return "q'";
+        }
+
+        return word;
+    }
+
+    function getLastWord(text) {
+        if (text.length == 0)
+            return text;
+        let words = text.split(' ');
+        return words[words.length - 1];
+    }
+
+    function getAllButLastWord(text) {
+        const lastIndex = text.lastIndexOf(' ');
+
+        return text.substring(0, lastIndex);
+    }
+
+    function removeAllTildes(word)
+    {
+        word.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+        return word;
+    }
+
+    function translate(word){
+        if (word.length <= 1) {
+            return word;
+        }
+
+        if (finishInS(word)) {
+            return removeLastVowel(word);
+        }
+
+        word = removeAllTildes(word);
+        word = queToQ(word);
+        word = tildyze(word);
+        word = removeLastChar(word);
+        word = lastDtoT(word);
+
+        if (word.length == 1) {
+           word = apostrophyze(word)
+        }
+
+        return word;
+    }
+
+    document.addEventListener('keypress', (e) => {
+        if (e.key !== ' ' && e.key !== 'Spacebar') {
+            return;
+        }
+
+        let text = e.target.value;
+        const lastWord = getLastWord(text);
+        text = getAllButLastWord(text);
+        text += ' ' + translate(lastWord);
+
+        e.target.value = text;
+    });
+
+</script>
+</html>
+
