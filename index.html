@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charSet="utf-8" />
-        <title>L'Traductó</title>
-    </head>
-    <body>
-        <div id="MainContainer">
-            <textarea rows="4" cols="50">
-            </textarea>
-        </div>
-    </body>
+<head>
+    <meta charSet="utf-8" />
+    <title>L'Traductó</title>
+</head>
+<body>
+<div id="MainContainer">
+    <textarea rows="4" cols="50"></textarea>
+    <textarea id="translatedText" readonly rows="4" cols="50"></textarea>
+</div>
+</body>
 <script>
     function isS(char) {
         return char.toLowerCase() === 's';
@@ -132,7 +132,7 @@
         word = lastDtoT(word);
 
         if (word.length == 1) {
-           word = apostrophyze(word)
+            word = apostrophyze(word)
         }
 
         return word;
@@ -145,12 +145,12 @@
 
         let text = e.target.value;
         const lastWord = getLastWord(text);
-        text = getAllButLastWord(text);
-        text += ' ' + translate(lastWord);
+        const translatedText = document.getElementById('translatedText');
+        text = getAllButLastWord(translatedText.value);
+        text += translate(lastWord) + '  ';
 
-        e.target.value = text;
+        translatedText.value = text;
     });
 
 </script>
 </html>
-
