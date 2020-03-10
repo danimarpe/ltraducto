@@ -138,18 +138,20 @@
         return word;
     }
 
-    document.addEventListener('keypress', (e) => {
-        if (e.key !== ' ' && e.key !== 'Spacebar') {
-            return;
+    function translateText(text) {
+        const words = text.split(' ');
+        const translatedWords = [];
+        for(let word of words) {
+            translatedWords.push(translate(word))
         }
 
-        let text = e.target.value;
-        const lastWord = getLastWord(text);
-        const translatedText = document.getElementById('translatedText');
-        text = getAllButLastWord(translatedText.value);
-        text += translate(lastWord) + '  ';
+        return translatedWords.join(' ');
+    }
 
-        translatedText.value = text;
+    document.addEventListener('keyup', (e) => {
+        let text = e.target.value;
+
+        translatedText.value = translateText(text);
     });
 
 </script>
